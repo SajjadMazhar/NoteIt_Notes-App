@@ -4,8 +4,12 @@ const bcrypt = require("bcryptjs")
 const router = require('express').Router();
 const jwt = require("jsonwebtoken")
 const verifyToken = require("../middlewares/jwt.middleware")
+const upload = require("../middlewares/multer.middleware")
 
-router.post("/signup", async(req, res)=>{
+// POST api/user/signup
+// takes {name, email, password, confirmPassword, dob} dp from multer 
+router.post("/signup", upload.single("dp"), async(req, res)=>{
+  console.log(req.file)
     const {name, email, password, confirmPassword, dob} = req.body
     if(!(name && email && password && confirmPassword && dob)){
       return res.status(400).json({title:"error occured", msg:"please fill all the input fields"})
@@ -18,7 +22,7 @@ router.post("/signup", async(req, res)=>{
       const hashedPassword = await bcrypt.hash(password, salt)
       const user = await prisma.user.create({
         data:{
-          name, email, password:hashedPassword, dob
+          name, email, password:hashedPassword, dob, dp:req.file.path
         }
       })
       const token = jwt.sign({id:user.id}, process.env.SECRET, {expiresIn:"24h"})
@@ -32,7 +36,9 @@ router.post("/signup", async(req, res)=>{
     }
 })
 
-router.post("/signin", verifyToken, async (req, res)=>{
+// POST api/user/signin
+// {email, password}
+router.post("/signin", async (req, res)=>{
   const {email, password} = req.body
   if(!(email && password)){
     return res.status(400).json({title:"error", msg:"please input email and password"})
@@ -54,6 +60,8 @@ router.post("/signin", verifyToken, async (req, res)=>{
   }
 })
 
+// PATCH api/user/updatepassword
+// {oldPassword, newPassword} userId from authentication
 router.patch("/updatepassword", verifyToken, async(req, res)=>{
   const {oldPassword, newPassword} = req.body
   if(!(oldPassword && newPassword)){
@@ -66,7 +74,7 @@ router.patch("/updatepassword", verifyToken, async(req, res)=>{
       }
     })
     const isOldPassMatched = await bcrypt.compare(oldPassword, user.password)
-    if(!isOldPassMatched) return res.status(403).json({title:"old password is wrong"});
+    if(!isOldPassMatched) return res.status(403).json({title:"forbidden", msg:"old password is wrong"});
     const salt = await bcrypt.genSalt(8)
     const newHashedPass = await bcrypt.hash(newPassword, salt)
     await prisma.user.update({

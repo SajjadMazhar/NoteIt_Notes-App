@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const createError = require('http-errors');
 const morgan = require('morgan');
 require('dotenv').config();
@@ -7,12 +8,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
+app.use(require("cors")())
 
 app.get('/', async (req, res, next) => {
   res.send({ message: 'Awesome it works 🐻' });
 });
 
-app.use('/user', require('./routes/user.route'));
+app.use("/static", express.static(path.join(__dirname,"public")))
+app.use('/api/user', require('./routes/user.route'));
+app.use('/api/note', require('./routes/note.route'))
 
 app.use((req, res, next) => {
   next(createError.NotFound());
