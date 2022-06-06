@@ -6,11 +6,25 @@ const jwt = require("jsonwebtoken")
 const verifyToken = require("../middlewares/jwt.middleware")
 const upload = require("../middlewares/multer.middleware")
 
+
+router.get("/", verifyToken, async(req, res)=>{
+  try {
+    const {name, email, dob, dp, bio} = await prisma.user.findUnique({
+      where:{
+        id:req.id
+      }
+    })
+    res.json({title:"success", user:{name, email, dob, dp, bio}})
+  } catch (error) {
+    res.status(500).json({title:"internal server error", err:error.message})
+  }
+})
 // POST api/user/signup
 // takes {name, email, password, confirmPassword, dob} dp from multer 
 router.post("/signup", upload.single("dp"), async(req, res)=>{
   console.log(req.file)
-    const {name, email, password, confirmPassword, dob} = req.body
+    const {name, email, password, confirmPassword, dob, bio} = req.body
+    // console.log(name, email, password, confirmPassword, dob, bio)
     if(!(name && email && password && confirmPassword && dob)){
       return res.status(400).json({title:"error occured", msg:"please fill all the input fields"})
     }
@@ -22,12 +36,14 @@ router.post("/signup", upload.single("dp"), async(req, res)=>{
       const hashedPassword = await bcrypt.hash(password, salt)
       const user = await prisma.user.create({
         data:{
-          name, email, password:hashedPassword, dob, dp:req.file.path
+          name, email, password:hashedPassword, dob, dp:req.file.path, bio
         }
       })
       const token = jwt.sign({id:user.id}, process.env.SECRET, {expiresIn:"24h"})
       res.status(201).json({
-        title:"created", token
+        title:"created", token, user:{
+          name,email,dob:new Date(dob).toDateString(),dp:req.file.path,bio
+        }
       })
     } catch (error) {
       res.status(500).json({
@@ -40,6 +56,7 @@ router.post("/signup", upload.single("dp"), async(req, res)=>{
 // {email, password}
 router.post("/signin", async (req, res)=>{
   const {email, password} = req.body
+  console.log(req.body)
   if(!(email && password)){
     return res.status(400).json({title:"error", msg:"please input email and password"})
   }
@@ -49,12 +66,18 @@ router.post("/signin", async (req, res)=>{
         email
       }
     })
+    // const {name, email, dob, dp, bio} = user
+    if(!user){
+      return res.status(400).json({title:"bad request", msg:"user does not exist"})
+    }
     const isPasswordMatched = await bcrypt.compare(password, user.password)
     if(!isPasswordMatched){
       return res.status(403).json({title:"login error", msg:"invalid email or password"})
     }
     const token = jwt.sign({id:user.id}, process.env.SECRET)
-    res.status(200).json({title:"success", token})
+    res.status(200).json({title:"success", token, user:{
+        name:user.name, email:user.email, dob:new Date(user.dob).toDateString(), bio:user.bio, dp:user.dp
+    }})
   } catch (error) {
     res.status(500).json({title:"error", err:error.message}) 
   }

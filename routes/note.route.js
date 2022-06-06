@@ -33,6 +33,9 @@ router.get("/", verifyToken, async(req, res)=>{
             },
             include:{
                 user:true
+            },
+            orderBy:{
+                title:'asc'
             }
         })
         res.status(200).json({title:"success", notes})
@@ -80,6 +83,30 @@ router.delete("/:noteId", verifyToken, async(req, res)=>{
             }
         })
         res.status(200).json({title:"success", note})
+    } catch (error) {
+        res.status(500).json({title:"internal server error", err:error.message})
+    }
+})
+
+router.patch("/fav/:noteId", verifyToken, async(req, res)=>{
+    
+    const id = req.params.noteId
+    if(!id){
+        return res.status(400).json({title:"error", msg:"id is missing"})
+    }
+    try {
+        const note = await prisma.note.findUnique({
+            where:{
+                id:parseInt(id)
+            }
+        })
+        await prisma.note.update({
+            where:{
+                id:parseInt(id)
+            },
+            data:{isFavourite:note.isFavourite?false:true}
+        })
+        res.json({title:"success"})
     } catch (error) {
         res.status(500).json({title:"internal server error", err:error.message})
     }
