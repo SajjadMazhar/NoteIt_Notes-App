@@ -26,7 +26,7 @@ router.post("/", verifyToken, async(req, res)=>{
 // GET /api/note
 router.get("/", verifyToken, async(req, res)=>{
     const userId = req.id
-    const {offset=0, take=8} = req.body
+    const {take, pageNo} = req.query
     try {
         const notes = await prisma.note.findMany({
             where:{
@@ -35,13 +35,13 @@ router.get("/", verifyToken, async(req, res)=>{
             include:{
                 user:true
             },
-            take:take,
-            skip:12*offset,
+            take:parseInt(take),
+            skip:8*parseInt(pageNo),
             orderBy:{
-                title:'asc'
+                createdAt:'asc'
             }
         })
-        res.status(200).json({title:"success", notes})
+        res.status(200).json({title:"success", notes, totalData:notes.length})
     } catch (error) {
         res.status(500).json({title:"internal server error", err:error.message})
     }
