@@ -66,9 +66,8 @@ router.post("/signin", async (req, res)=>{
         email
       }
     })
-    // const {name, email, dob, dp, bio} = user
     if(!user){
-      return res.status(400).json({title:"bad request", msg:"user does not exist"})
+      return res.status(400).json({title:"failed", msg:"user does not exist"})
     }
     const isPasswordMatched = await bcrypt.compare(password, user.password)
     if(!isPasswordMatched){

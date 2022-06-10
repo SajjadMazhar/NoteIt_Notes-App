@@ -26,6 +26,7 @@ router.post("/", verifyToken, async(req, res)=>{
 // GET /api/note
 router.get("/", verifyToken, async(req, res)=>{
     const userId = req.id
+    const {offset=0, take=8} = req.body
     try {
         const notes = await prisma.note.findMany({
             where:{
@@ -34,6 +35,8 @@ router.get("/", verifyToken, async(req, res)=>{
             include:{
                 user:true
             },
+            take:take,
+            skip:12*offset,
             orderBy:{
                 title:'asc'
             }
