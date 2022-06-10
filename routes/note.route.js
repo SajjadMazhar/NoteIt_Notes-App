@@ -38,10 +38,16 @@ router.get("/", verifyToken, async(req, res)=>{
             take:parseInt(take),
             skip:8*parseInt(pageNo),
             orderBy:{
-                createdAt:'asc'
+                createdAt:'descasc'
             }
         })
-        res.status(200).json({title:"success", notes, totalData:notes.length})
+        const favNotes = await prisma.note.findMany({
+            where:{
+                userId,
+                isFavourite:true
+            }
+        })
+        res.status(200).json({title:"success", notes, favs:favNotes, totalData:notes.length})
     } catch (error) {
         res.status(500).json({title:"internal server error", err:error.message})
     }
