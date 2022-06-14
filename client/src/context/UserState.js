@@ -14,7 +14,7 @@ const initialUserInputs = {
 }
 const port = 3001;
 // const host = `http://localhost:${port}`
-const host = "/"
+const host = "https://note-it-007.herokuapp.com/"
 const authPath = ['/', '/favourites', '/Profile', '/Logout', '/Account']
 
 const UserState = ({children}) => {

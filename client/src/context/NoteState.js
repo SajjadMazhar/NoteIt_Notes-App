@@ -12,7 +12,7 @@ const initialNote = [{
 }]
 const port = 3001;
 // const host = `http://localhost:${port}`
-const host = "/"
+const host = "https://note-it-007.herokuapp.com"
 
 const NoteState = ({children}) => {
     const [isLoading, setIsLoading] = useState(true)
