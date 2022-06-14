@@ -13,7 +13,8 @@ const initialUserInputs = {
     dp:null
 }
 const port = 3001;
-const host = `http://localhost:${port}`
+// const host = `http://localhost:${port}`
+const host = "/"
 const authPath = ['/', '/favourites', '/Profile', '/Logout', '/Account']
 
 const UserState = ({children}) => {

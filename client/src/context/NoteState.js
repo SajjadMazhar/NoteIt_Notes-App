@@ -11,7 +11,8 @@ const initialNote = [{
   createdAt:""
 }]
 const port = 3001;
-const host = `http://localhost:${port}`
+// const host = `http://localhost:${port}`
+const host = "/"
 
 const NoteState = ({children}) => {
     const [isLoading, setIsLoading] = useState(true)
