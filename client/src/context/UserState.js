@@ -14,7 +14,7 @@ const initialUserInputs = {
 }
 const port = 3001;
 // const host = `http://localhost:${port}`
-const host = "https://note-it-007.herokuapp.com/"
+// const host = "https://note-it-007.herokuapp.com/"
 const authPath = ['/', '/favourites', '/Profile', '/Logout', '/Account']
 
 const UserState = ({children}) => {
@@ -41,7 +41,7 @@ const UserState = ({children}) => {
 
     const fetchTheUser = ()=>{
         const token = localStorage.getItem("authToken")
-        axios.get(host+"/api/user", {
+        axios.get("/api/user", {
             headers:{
                 "Content-Type":"multipart/form-data",
                 "authorization":"Bearer "+token
@@ -61,7 +61,7 @@ const UserState = ({children}) => {
 
     const addNewUser = ()=>{
         
-        axios.post(host+"/api/user/signup", registerInputs, {
+        axios.post("/api/user/signup", registerInputs, {
             headers:{
                 "Content-Type":"multipart/form-data"
             }
@@ -89,7 +89,7 @@ const UserState = ({children}) => {
     }
 
     const loginUser = ()=>{
-        axios.post(host+"/api/user/signin", loginInputs, {
+        axios.post("/api/user/signin", loginInputs, {
             headers:{
                 "Content-Type":"application/json"
             }
@@ -114,7 +114,7 @@ const UserState = ({children}) => {
     const handleChangePassword = ()=>{
         const token = localStorage.getItem("authToken")
 
-        axios.patch(host+"/api/user/updatepassword", updatePassInput, {
+        axios.patch("/api/user/updatepassword", updatePassInput, {
             headers:{
                 "Content-Type":"application/json",
                 "authorization":"Bearer "+token
@@ -141,7 +141,7 @@ const UserState = ({children}) => {
 
     },[isLoggedIn, navigate])
 const userValues={
-    host,
+    // host,
     registerInputs,
     handleOnChangeRegisterInputs,
     addNewUser,

@@ -12,7 +12,7 @@ const initialNote = [{
 }]
 const port = 3001;
 // const host = `http://localhost:${port}`
-const host = "https://note-it-007.herokuapp.com"
+// const host = "https://note-it-007.herokuapp.com"
 
 const NoteState = ({children}) => {
     const [isLoading, setIsLoading] = useState(true)
@@ -40,7 +40,7 @@ const NoteState = ({children}) => {
     //fetching notes
     const fetchTheNotes = (take=8, pageNo=0)=>{
       const token = localStorage.getItem("authToken")
-      axios.get(host+`/api/note?take=${take}&pageNo=${pageNo}`, {
+      axios.get(`/api/note?take=${take}&pageNo=${pageNo}`, {
         headers:{
           authorization:"Bearer "+token
         }
@@ -60,7 +60,7 @@ const NoteState = ({children}) => {
         isFavourite:false, color:radioValue
       }
       const token = localStorage.getItem("authToken")
-      axios.post(host+"/api/note", currentNote, {
+      axios.post("/api/note", currentNote, {
         headers:{
             "Content-Type":"application/json",
             "authorization":"Bearer "+token
@@ -77,7 +77,7 @@ const NoteState = ({children}) => {
     // delete note
     const deleteNote = (id)=>{
       const token = localStorage.getItem("authToken")
-      axios.delete(host+"/api/note/"+id, {
+      axios.delete("/api/note/"+id, {
         headers:{
             "authorization":"Bearer "+token
         }
@@ -102,7 +102,7 @@ const NoteState = ({children}) => {
       const currentNote = {
         title:updateInput.title, content:updateInput.content
       }
-      axios.patch(host+"/api/note/"+updateInput.id, currentNote, {
+      axios.patch("/api/note/"+updateInput.id, currentNote, {
         headers:{
             "Content-Type":"application/json",
             "authorization":"Bearer "+token
@@ -130,7 +130,7 @@ const NoteState = ({children}) => {
     const toggleFavourite = (id)=>{
       
       const token = localStorage.getItem("authToken")
-      axios.patch(host+"/api/note/fav/"+id, {}, {
+      axios.patch("/api/note/fav/"+id, {}, {
         headers:{
             "Content-Type":"application/json",
             "authorization":"Bearer "+token
@@ -153,7 +153,7 @@ const NoteState = ({children}) => {
   
 const values ={
   notes, 
-  host,
+  // host,
   noteInput,
   setNoteInput,
   handleSetNotes,
