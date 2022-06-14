@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
-app.use(require("cors")())
+app.use(require("cors")("https://note-it-007.herokuapp.com/"))
 
 // app.get('/', async (req, res, next) => {
 //   res.send({ message: 'Awesome it works 🐻' });
