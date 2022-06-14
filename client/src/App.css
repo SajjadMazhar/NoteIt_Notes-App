@@ -1,0 +1,16 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+body{
+  background-color: #fdd180;
+}
+
+.app{
+  padding: 4rem;
+}
+.reg{
+  padding: 4rem;
+  display: flex;
+  justify-content: center;
+}

@@ -113,6 +113,23 @@ router.patch("/updatepassword", verifyToken, async(req, res)=>{
     res.status(500).json({title:"error", err:error.message})
   }
 })
+
+router.patch("/bio", verifyToken, async(req, res)=>{
+  const bio = req.body.bio
+  try {
+    const updatedBio = await prisma.user.update({
+      where:{
+        id:req.id
+      },
+      data:{
+        bio
+      }
+    })
+    res.json({title:"success", updatedBio})
+  } catch (error) {
+    res.status(500).json({title:"failed", msg:error.message})
+  }
+})
 module.exports = router;
 
 // user routes completed almost

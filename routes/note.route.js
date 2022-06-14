@@ -38,7 +38,7 @@ router.get("/", verifyToken, async(req, res)=>{
             take:parseInt(take),
             skip:8*parseInt(pageNo),
             orderBy:{
-                createdAt:'descasc'
+                createdAt:'desc'
             }
         })
         const favNotes = await prisma.note.findMany({

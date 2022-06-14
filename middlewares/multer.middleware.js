@@ -3,7 +3,7 @@ const path = require("path")
 
 const storage = multer.diskStorage({
     destination:(req, file, cb)=>{
-        cb(null, "public/dps")
+        cb(null, "client/build/dps")
     },
     filename:(req, file, cb)=>{
         const newName = Math.round(Math.random()*1E9) + path.extname(file.originalname)

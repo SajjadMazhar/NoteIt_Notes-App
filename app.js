@@ -10,11 +10,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 app.use(require("cors")())
 
-app.get('/', async (req, res, next) => {
-  res.send({ message: 'Awesome it works 🐻' });
-});
+// app.get('/', async (req, res, next) => {
+//   res.send({ message: 'Awesome it works 🐻' });
+// });
 
-app.use("/static", express.static(path.join(__dirname,"public")))
+// app.use("/static", express.static(path.join(__dirname,"public")))
+app.use(express.static("client/build"))
 app.use('/api/user', require('./routes/user.route'));
 app.use('/api/note', require('./routes/note.route'))
 
