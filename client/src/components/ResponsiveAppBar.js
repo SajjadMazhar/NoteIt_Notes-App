@@ -27,7 +27,7 @@ const ResponsiveAppBar = () => {
       localStorage.removeItem("authToken")
       setIsloggedIn(false)
       navigate('/login')
-      window.location.reload()
+      // window.location.reload()
     }
   }
   const handleOpenNavMenu = (event) => {
