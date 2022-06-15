@@ -43,17 +43,17 @@ const UserState = ({children}) => {
         const token = localStorage.getItem("authToken")
         axios.get("/api/user", {
             headers:{
-                "Content-Type":"multipart/form-data",
+                "Content-Type":"application/json",
                 "authorization":"Bearer "+token
             }
         }).then(resp=>{
             const data = resp.data.user
-            const newdp = data.dp.split("/")
-            newdp.shift()
-            newdp.shift()
-            console.log(newdp)
-            const updatedUserData = {...resp.data.user, dp:newdp.join("/")}
-            setProfile(updatedUserData)
+            // const newdp = data.dp.split("/")
+            // newdp.shift()
+            // newdp.shift()
+            // console.log(newdp)
+            // const updatedUserData = {...resp.data.user, dp:newdp.join("/")}
+            setProfile(resp.data.user)
         }).catch(err=>{
             console.log(err)
         })
@@ -63,7 +63,8 @@ const UserState = ({children}) => {
         
         axios.post("/api/user/signup", registerInputs, {
             headers:{
-                "Content-Type":"multipart/form-data"
+                // this should be in multipart/form-data but for testing it has been changed
+                "Content-Type":"application/json"
             }
         }).then(resp=>{
             localStorage.setItem("authToken", resp.data.token)
@@ -72,10 +73,10 @@ const UserState = ({children}) => {
             setProfile(resp.data.user)
             fetchTheNotes()
             const data = resp.data.user
-            const newdp = data.dp.split("/")
-            newdp.shift()
-            const updatedUserData = {...resp.data.user, dp:newdp.join("/")}
-            setProfile(updatedUserData)
+            // const newdp = data.dp.split("/")
+            // newdp.shift()
+            // const updatedUserData = {...resp.data.user, dp:newdp.join("/")}
+            setProfile(data)
             navigate("/")
             setAlertDetails({status:"success", message:"successfully registered into NoteIt", title:"Success"})
             setDisplay("block")
@@ -102,7 +103,7 @@ const UserState = ({children}) => {
             navigate("/")
             setAlertDetails({status:"success", message:"successfully logged in", title:"Success"})
             setDisplay("block")
-            window.location.reload()
+            // window.location.reload()
         }).catch(err=>{
             console.log(err.message)
             setAlertDetails({status:"warning", message:"something failed", title:"Unable to login"})
