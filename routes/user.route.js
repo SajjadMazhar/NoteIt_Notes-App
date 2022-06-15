@@ -36,7 +36,7 @@ router.post("/signup", upload.single("dp"), async(req, res)=>{
       const hashedPassword = await bcrypt.hash(password, salt)
       const user = await prisma.user.create({
         data:{
-          name, email, password:hashedPassword, dob, dp:req.file.path, bio
+          name, email, password:hashedPassword, dob, bio
         }
       })
       const token = jwt.sign({id:user.id}, process.env.SECRET, {expiresIn:"24h"})
