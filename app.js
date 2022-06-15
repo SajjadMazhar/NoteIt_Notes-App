@@ -15,7 +15,7 @@ app.use(require("cors")())
 // });
 
 // app.use("/static", express.static(path.join(__dirname,"public")))
-app.use("/static",express.static("client/build"))
+app.use(express.static("client/build"))
 app.use('/api/user', require('./routes/user.route'));
 app.use('/api/note', require('./routes/note.route'));
 
