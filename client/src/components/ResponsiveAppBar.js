@@ -19,11 +19,10 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const {profile, host, isLoggedIn, setIsloggedIn } = React.useContext(userContext)
+  const {profile, host, isLoggedIn, setIsloggedIn, navigate } = React.useContext(userContext)
   const {mode} = React.useContext(designContext)
 
   const handleLogOut = (setting)=>{
-    const {navigate} = React.useContext(userContext)
     if(setting === 'logout'){
       localStorage.removeItem("authToken")
       setIsloggedIn(false)
