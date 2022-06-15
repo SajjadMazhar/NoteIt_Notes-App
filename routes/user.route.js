@@ -42,7 +42,7 @@ router.post("/signup", upload.single("dp"), async(req, res)=>{
       const token = jwt.sign({id:user.id}, process.env.SECRET, {expiresIn:"24h"})
       res.status(201).json({
         title:"created", token, user:{
-          name,email,dob:new Date(dob).toDateString(),dp:req.file.path,bio
+          name,email,dob:new Date(dob).toDateString(),bio
         }
       })
     } catch (error) {
