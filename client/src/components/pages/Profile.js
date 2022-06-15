@@ -9,14 +9,14 @@ import userContext from '../../context/UserContext';
 import axios from 'axios';
 
 export default function Profile() {
-  const {profile, host, fetchTheUser} = React.useContext(userContext)
+  const {profile, fetchTheUser} = React.useContext(userContext)
   const [display, setDisplay] = React.useState("none")
   const [bioInput, setBioInput] = React.useState("")
   
 
   const handleUpdateBio = async()=>{
     const token = localStorage.getItem("authToken")
-    const resp = await axios.patch(host+"/api/user/bio", {bio:bioInput},{
+    const resp = await axios.patch("/api/user/bio", {bio:bioInput},{
       headers:{
         "Content-Type":"application/json",
         "authorization":"Bearer "+token
